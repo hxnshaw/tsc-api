@@ -1,17 +1,25 @@
-import express,{Request,Response} from 'express'
+import express,{Express} from 'express';
+import morgan from 'morgan'
+import routes from './routes/posts'
 
-const app = express()
+const router:Express=express();
 
-app.use(express.json())
+router.use(morgan('dev'))
+router.use(express.json())
+router.use(express.urlencoded({extended:true}))
 
-//app.use(express.urlencoded({extended:true}))
+router.use('/',routes)
 
-app.get('/',(req:Request, res:Response) =>  {
-    return res.send("Hello world")
+//Error handling
+router.use((req,res,next)=>{
+const error=new Error('Not Found');
+return res.status(404).json({
+    message:error.message
+})
 })
  
 
-app.listen(3000,()=>{
+router.listen(3000,()=>{
     console.log("App is listening on port 3000");
     
 })   
