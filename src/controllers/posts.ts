@@ -6,6 +6,7 @@ interface Post{
     id:Number;
     title:String;
     body:String;
+    username:String;
 }
 
 const getPosts=async(req:Request, res:Response,next:NextFunction)=>{
@@ -30,9 +31,11 @@ const updatePost=async(req:Request, res:Response, next:NextFunction)=>{
     //get the data from req.body
     let title:string=req.body.title??null;
     let body:string = req.body.body??null;
+    let username:string = req.body.username??null;
     let response:AxiosResponse=await axios.put(`https://jsonplaceholder.typicode.com/posts/${id}`,{
         ...(title&&{title}),
         ...(body&&{body}),
+        ...(username&&{username})
     })
     return res.status(200).json({message:response.data})
 }
@@ -48,9 +51,11 @@ const deletePost=async(req:Request, res:Response, next:NextFunction)=>{
 const addPost=async(req:Request,res:Response,next:NextFunction)=>{
     let title:string=req.body.title;
     let body:string=req.body.body;
+    let username:string=req.body.username;
     let response:AxiosResponse=await axios.post(`https://jsonplaceholder.typicode.com/posts`,{
         title,
-        body
+        body,
+        username
     })
     return res.status(200).json({
         message:response.data
